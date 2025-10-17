@@ -39,7 +39,33 @@ Dataset: DeepGlobe Land Cover Challenge Dataset
 
  Framework: PyTorch Lightning for reproducible experimentation.
  Optimizer: AdamW (lr=1e4), Scheduler: CosineAnnealingLR.
- Training Time: 12 hrs on RTX A6000; Batch size = 16.
+ Training Time: 12 hrs on RTX A6000; Batch size = 16
+
+# Architecture (Textual Diagram)
+     ┌────────────────────────────────────────────────┐
+     │         Satellite Image (RGBNIR Bands)        │
+     └──────────────────┬─────────────────────────────┘
+                        │
+             ┌──────────▼──────────┐
+             │   Preprocessing &   │
+             │ Data Augmentation   │
+             └──────────┬──────────┘
+                        │
+             ┌──────────▼──────────┐
+             │     UNet Model     │
+             └──────────┬──────────┘
+                        │
+             ┌──────────▼──────────┐
+             │   DeepLabV3+ Model  │
+             └──────────┬──────────┘
+                        │
+             ┌──────────▼──────────┐
+             │   Ensemble Fusion   │
+             └──────────┬──────────┘
+                        │
+             ┌──────────▼──────────┐
+             │  Segmentation Mask  │
+             └─────────────────────┘
 
 # Results
 | Metric         | Value       | Description                       |
@@ -48,33 +74,8 @@ Dataset: DeepGlobe Land Cover Challenge Dataset
 | Accuracy       | 94.6%       | Pixellevel accuracy               |
 | Inference Time | 42 ms/frame | Realtime segmentation feasibility |
 
-# Key Insight: The hybrid UNet + DeepLabV3+ ensemble enhanced edge fidelity in urban and forest regions, yielding a 7% IoU gain compared to singlemodel baselines.
-
-# Architecture (Textual Diagram)
-┌────────────────────────────────────────────────┐
-│         Satellite Image (RGBNIR Bands)        │
-└──────────────────┬─────────────────────────────┘
-                   │
-        ┌──────────▼──────────┐
-        │   Preprocessing &   │
-        │ Data Augmentation   │
-        └──────────┬──────────┘
-                   │
-        ┌──────────▼──────────┐
-        │     UNet Model     │
-        └──────────┬──────────┘
-                   │
-        ┌──────────▼──────────┐
-        │   DeepLabV3+ Model  │
-        └──────────┬──────────┘
-                   │
-        ┌──────────▼──────────┐
-        │   Ensemble Fusion   │
-        └──────────┬──────────┘
-                   │
-        ┌──────────▼──────────┐
-        │  Segmentation Mask  │
-        └─────────────────────┘
+# Key Insight
+The hybrid UNet + DeepLabV3+ ensemble enhanced edge fidelity in urban and forest regions, yielding a 7% IoU gain compared to singlemodel baselines.
 
 # Conclusion
 The proposed ensemble segmentation framework demonstrated strong performance and generalization across varied landscapes. It provides a robust, interpretable, and scalable approach for land cover mapping applicable to urban planning, deforestation tracking, and agricultural monitoring.
